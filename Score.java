@@ -24,6 +24,8 @@ public class Score extends Actor
         newImage.setColor(Color.black);
         newImage.drawString("Score: " + score, 60, 32);
         setImage(newImage);
-        Greenfoot.playSound("score.wav");
+        if(score != 0){
+            Greenfoot.playSound("score.wav");
+        }
     }
 }

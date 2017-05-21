@@ -17,46 +17,52 @@ public class FlappyBird extends Actor
      */
     public void act() 
     {
-        
+
         //gravity
         setLocation( getX(), (int)(getY() + dy) );
-        
-        //changing the direction of the bird
-        if(dy<-5){
-            setRotation(-30);
-        }else if(-5<dy && dy<5){
-            setRotation(0);
-        }else if(dy>5){
-            setRotation(30);
+        if (getWorld().getObjects(Restart.class).isEmpty())
+        {
+            //changing the direction of the bird
+            if(dy<-5){
+                setRotation(-30);
+            }else if(-5<dy && dy<5){
+                setRotation(0);
+            }else if(dy>5){
+                setRotation(30);
+            }
+
+            //If bird hits pipes, game over
+            if(getOneIntersectingObject(TopPipe.class) != null){
+                displayGameOver();
+            }
+            if(getOneIntersectingObject(BotPipe.class) != null){
+                displayGameOver();
+            }
+
+            // If up key is pressed, the bird wil launch upwards
+            if (Greenfoot.isKeyDown("up")==true){
+                Greenfoot.playSound("click.wav");
+                dy=BOOST_SPEED;
+            }
+
+            //if bird falls on the ground, game over
+            if (getY() > getWorld().getHeight()){
+                displayGameOver();
+            }
+            
+            dy = dy +g;
+        } else{
+            dy = 0;
         }
-        
-        //If bird hits pipes, game over
-        if(getOneIntersectingObject(TopPipe.class) != null){
-            displayGameOver();
-            Greenfoot.playSound("gameover.wav");
-        }
-        if(getOneIntersectingObject(BotPipe.class) != null){
-            displayGameOver();
-            Greenfoot.playSound("gameover.wav");
-        }
-        
-        // If up key is pressed, the bird wil launch upwards
-        if (Greenfoot.isKeyDown("up")==true){
-            Greenfoot.playSound("click.wav");
-            dy=BOOST_SPEED;
-        }
-        
-        //if bird falls on the ground, game over
-        if (getY() > getWorld().getHeight()){
-            displayGameOver();
-        }
-        
         //increasing the speed in which the bird is fallig at
-        dy = dy +g;
+        
     }
+
     private void displayGameOver(){
         GameOver attitudeadjustment = new GameOver();
         getWorld().addObject(attitudeadjustment, getWorld().getWidth()/2, getWorld().getHeight()/2);
-        Greenfoot.stop();
+        Restart restart = new Restart();
+        getWorld().addObject(restart, getWorld().getWidth()/2, getWorld().getHeight()/2 + 40);
+        Greenfoot.playSound("gameover.wav");
     }
 }

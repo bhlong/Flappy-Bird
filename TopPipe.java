@@ -15,6 +15,9 @@ public class TopPipe extends Actor
      */
     public void act() 
     {
-        setLocation(getX()-PIPE_SPEED,getY());
+        if (getWorld().getObjects(Restart.class).isEmpty())
+        {
+            setLocation(getX()-PIPE_SPEED,getY());
+        }
     }    
 }
